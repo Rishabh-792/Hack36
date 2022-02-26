@@ -11,7 +11,11 @@ const helmet = require("helmet");
 const mongoSanitize = require("express-mongo-sanitize");
 const MongoDBStore = require("connect-mongo");
 
-const Record = require("./models/records");
+const catchAsync = require("./utils/catchAsync");
+const ExpressError = require("./utils/ExpressError");
+
+const records = require("./routes/records");
+const forums = require("./routes/forum");
 
 mongoose.connect("mongodb://localhost:27017/hack", {
     useNewUrlParser: true,
@@ -36,47 +40,22 @@ app.engine("ejs", ejsMate);
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 
+app.use("/records", records);
+app.use("/records/:id/forum", forums);
+
 app.get("/", (req, res) => {
     res.render("home");
 });
 
-app.get("/records", async (req, res) => {
-    const records = await Record.find({});
-    res.render("records/index", { records });
+app.all("*", (req, res, next) => {
+    next(new ExpressError("Page Not Found", 404));
 });
 
-app.get("/records/new", (req, res) => {
-    res.render("records/new");
-});
-
-app.post("/records", async (req, res) => {
-    const record = new Record(req.body.record);
-    await record.save();
-    res.redirect(`/records/${record._id}`);
-});
-
-app.get("/records/:id", async (req, res) => {
-    const record = await Record.findById(req.params.id);
-    res.render("records/show", { record });
-});
-
-app.get("/records/:id/edit", async (req, res) => {
-    const record = await Record.findById(req.params.id);
-    res.render("records/edit", { record });
-});
-
-app.put("/records/:id", async (req, res) => {
-    const { id } = req.params;
-    const record = await Record.findByIdAndUpdate(id, {
-        ...req.body.record,
-    });
-    res.redirect(`/records/${record._id}`);
-});
-
-app.delete("/records/:id", async (req, res) => {
-    const { id } = req.params;
-    await Record.findByIdAndDelete(id);
-    res.redirect("/records");
+app.use((err, req, res, next) => {
+    const { statusCode = 500 } = err;
+    if (!err.message) err.message = "Oh No, Something Went Wrong!";
+    // res.status(statusCode).render('error', { err })
+    res.status(statusCode).render("error", { err });
 });
 
 app.listen(3000, () => {

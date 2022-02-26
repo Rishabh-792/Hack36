@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const Forum = require("./forum");
 const Schema = mongoose.Schema;
 
 const recordsSchema = new Schema({
@@ -7,6 +8,22 @@ const recordsSchema = new Schema({
     symptoms: String,
     treatment: String,
     description: String,
+    forum: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: "Forum",
+        },
+    ],
+});
+
+recordsSchema.post("findOneAndDelete", async function (doc) {
+    if (doc) {
+        await Forum.deleteMany({
+            _id: {
+                $in: doc.forum,
+            },
+        });
+    }
 });
 
 module.exports = mongoose.model("Records", recordsSchema);

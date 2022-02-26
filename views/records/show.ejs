@@ -29,7 +29,30 @@
                     2 days ago
                 </div>
             </div>
-
         </div>
-
+        <div class="col-6">
+            <h2>Forum</h2>
+            <form action="/records/<%=record._id%>/forum" method="POST" class="mb-3 validated-form" novalidate>
+                <div class="mb-3">
+                    <label class="form-label" for="body">Your Opinion</label>
+                    <textarea class="form-control" name="forum[body]" id="body" cols="30" rows="3" required></textarea>
+                    <div class="valid-feedback">
+                        Looks good!
+                    </div>
+                </div>
+                <button class="btn btn-success">Submit</button>
+            </form>
+            <% for(let forum of record.forum) { %>
+                <div class="card mb-3 ">
+                    <div class="card-body">
+                        <p class="card-text">
+                            <%= forum.body %>
+                        </p>
+                        <form action="/records/<%=record._id%>/forum/<%=forum._id%>?_method=DELETE" method="POST">
+                            <button class="btn btn-sm btn-danger">Delete</button>
+                        </form>
+                    </div>
+                </div>
+                <% } %>
+        </div>
     </div>
