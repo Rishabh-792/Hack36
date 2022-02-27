@@ -16,4 +16,8 @@ The medical student can examine what symptoms an illness may exhibit or what tre
 Other doctors whose patients exhibit different symptoms can check the database to see what treatments are available, or they can call the doctor, and if the patient's financial situation is poor, they can look for the most cost-effective treatment.
 
 ## How to run code 
-Since our website is hosted on Heroku, you are only a click away.
+For running the code Download the code in you local machine and use command
+```nodemon app.js```
+or
+```node .js```
+then run localhost:3000 in your browser
