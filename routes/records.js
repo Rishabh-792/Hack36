@@ -2,21 +2,8 @@ const express = require("express");
 const router = express.Router();
 const Record = require("../models/records");
 const catchAsync = require("../utils/catchAsync");
-const ExpressError = require("../utils/ExpressError");
 
-const { recordsSchema } = require("../schemas.js");
-
-const { isLoggedIn } = require("../middleware");
-
-const validateRecord = (req, res, next) => {
-    const { error } = recordsSchema.validate(req.body);
-    if (error) {
-        const msg = error.details.map((el) => el.message).join(",");
-        throw new ExpressError(msg, 400);
-    } else {
-        next();
-    }
-};
+const { isLoggedIn, isAuthor, validateRecord } = require("../middleware");
 
 router.get(
     "/",
@@ -36,6 +23,7 @@ router.post(
     validateRecord,
     catchAsync(async (req, res) => {
         const record = new Record(req.body.record);
+        record.author = req.user;
         await record.save();
         req.flash("success", "Successfully made a new record!");
         res.redirect(`/records/${record._id}`);
@@ -45,7 +33,14 @@ router.post(
 router.get(
     "/:id",
     catchAsync(async (req, res) => {
-        const record = await Record.findById(req.params.id).populate("forum");
+        const record = await Record.findById(req.params.id)
+            .populate({
+                path: "forum",
+                populate: {
+                    path: "author",
+                },
+            })
+            .populate("author");
         if (!record) {
             req.flash("error", "Cannot find that record!");
             return res.redirect("/records");
@@ -57,6 +52,7 @@ router.get(
 router.get(
     "/:id/edit",
     isLoggedIn,
+    isAuthor,
     catchAsync(async (req, res) => {
         const record = await Record.findById(req.params.id);
         if (!record) {
@@ -70,6 +66,7 @@ router.get(
 router.put(
     "/:id",
     isLoggedIn,
+    isAuthor,
     validateRecord,
     catchAsync(async (req, res) => {
         const { id } = req.params;
@@ -84,6 +81,7 @@ router.put(
 router.delete(
     "/:id",
     isLoggedIn,
+    isAuthor,
     catchAsync(async (req, res) => {
         const { id } = req.params;
         await Record.findByIdAndDelete(id);

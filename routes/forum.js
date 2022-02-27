@@ -1,30 +1,22 @@
 const express = require("express");
 const router = express.Router({ mergeParams: true });
 
+const { isLoggedIn, isForumAuthor, validateForum } = require("../middleware");
+
 const Record = require("../models/records");
 const Forum = require("../models/forum");
-
-const { forumSchema } = require("../schemas.js");
 
 const ExpressError = require("../utils/ExpressError");
 const catchAsync = require("../utils/catchAsync");
 
-const validateForum = (req, res, next) => {
-    const { error } = forumSchema.validate(req.body);
-    if (error) {
-        const msg = error.details.map((el) => el.message).join(",");
-        throw new ExpressError(msg, 400);
-    } else {
-        next();
-    }
-};
-
 router.post(
     "/",
+    isLoggedIn,
     validateForum,
     catchAsync(async (req, res) => {
         const record = await Record.findById(req.params.id);
         const forum = new Forum(req.body.forum);
+        forum.author = req.user._id;
         record.forum.push(forum);
         await forum.save();
         await record.save();
@@ -35,6 +27,8 @@ router.post(
 
 router.delete(
     "/:forumId",
+    isLoggedIn,
+    isForumAuthor,
     catchAsync(async (req, res) => {
         const { id, forumId } = req.params;
         await Record.findByIdAndUpdate(id, {

@@ -12,8 +12,8 @@ router.post(
     "/register",
     catchAsync(async (req, res, next) => {
         try {
-            const { title, email, username, password } = req.body;
-            const user = new User({ title, email, username });
+            const { title, email, username, password, image } = req.body;
+            const user = new User({ title, email, username, image });
             const registeredUser = await User.register(user, password);
             req.login(registeredUser, (err) => {
                 if (err) return next(err);
@@ -38,7 +38,7 @@ router.post(
         failureRedirect: "/login",
     }),
     (req, res) => {
-        req.flash("success", "welcome back!");
+        req.flash("success", "Welcome Back!");
         const redirectUrl = req.session.returnTo || "/records";
         delete req.session.returnTo;
         res.redirect(redirectUrl);

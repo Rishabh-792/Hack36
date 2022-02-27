@@ -8,6 +8,10 @@ const recordsSchema = new Schema({
     symptoms: String,
     treatment: String,
     description: String,
+    author: {
+        type: Schema.Types.ObjectId,
+        ref: "User",
+    },
     forum: [
         {
             type: Schema.Types.ObjectId,
