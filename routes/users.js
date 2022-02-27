@@ -17,7 +17,7 @@ router.post(
             const registeredUser = await User.register(user, password);
             req.login(registeredUser, (err) => {
                 if (err) return next(err);
-                req.flash("success", "Welcome to title!");
+                req.flash("success", "Welcome to Pharmxchange!");
                 res.redirect("/records");
             });
         } catch (e) {
