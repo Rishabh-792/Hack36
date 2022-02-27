@@ -32,13 +32,10 @@ router.post(
     "/",
     validateRecord,
     catchAsync(async (req, res) => {
-        try {
-            const record = new Record(req.body.record);
-            await record.save();
-            res.redirect(`/records/${record._id}`);
-        } catch (e) {
-            next(e);
-        }
+        const record = new Record(req.body.record);
+        await record.save();
+        req.flash("success", "Successfully made a new record!");
+        res.redirect(`/records/${record._id}`);
     })
 );
 
@@ -46,6 +43,10 @@ router.get(
     "/:id",
     catchAsync(async (req, res) => {
         const record = await Record.findById(req.params.id).populate("forum");
+        if (!record) {
+            req.flash("error", "Cannot find that record!");
+            return res.redirect("/records");
+        }
         res.render("records/show", { record });
     })
 );
@@ -54,6 +55,10 @@ router.get(
     "/:id/edit",
     catchAsync(async (req, res) => {
         const record = await Record.findById(req.params.id);
+        if (!record) {
+            req.flash("error", "Cannot find that record!");
+            return res.redirect("/records");
+        }
         res.render("records/edit", { record });
     })
 );
@@ -66,6 +71,7 @@ router.put(
         const record = await Record.findByIdAndUpdate(id, {
             ...req.body.record,
         });
+        req.flash("success", "Successfully updated record!");
         res.redirect(`/records/${record._id}`);
     })
 );
@@ -75,6 +81,7 @@ router.delete(
     catchAsync(async (req, res) => {
         const { id } = req.params;
         await Record.findByIdAndDelete(id);
+        req.flash("success", "Successfully deleted record!");
         res.redirect("/records");
     })
 );

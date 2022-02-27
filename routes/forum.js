@@ -28,6 +28,7 @@ router.post(
         record.forum.push(forum);
         await forum.save();
         await record.save();
+        req.flash("success", "Successfully made a new comment!");
         res.redirect(`/records/${record._id}`);
     })
 );
@@ -40,6 +41,7 @@ router.delete(
             $pull: { forum: forumId },
         });
         await Forum.findByIdAndDelete(forumId);
+        req.flash("success", "Successfully deleted comment!");
         res.redirect(`/records/${id}`);
     })
 );
