@@ -20,7 +20,7 @@ const forums = require("./routes/forum");
 
 const User = require("./models/user");
 
-mongoose.connect("mongodb://localhost:27017/hack", {
+mongoose.connect("mongodb+srv://cs:1234@cluster0.wyw0m.mongodb.net/cs?retryWrites=true&w=majority", {
     useNewUrlParser: true,
     useUnifiedTopology: true,
 });
