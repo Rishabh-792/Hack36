@@ -6,6 +6,8 @@ const ExpressError = require("../utils/ExpressError");
 
 const { recordsSchema } = require("../schemas.js");
 
+const { isLoggedIn } = require("../middleware");
+
 const validateRecord = (req, res, next) => {
     const { error } = recordsSchema.validate(req.body);
     if (error) {
@@ -24,12 +26,13 @@ router.get(
     })
 );
 
-router.get("/new", (req, res) => {
+router.get("/new", isLoggedIn, (req, res) => {
     res.render("records/new");
 });
 
 router.post(
     "/",
+    isLoggedIn,
     validateRecord,
     catchAsync(async (req, res) => {
         const record = new Record(req.body.record);
@@ -53,6 +56,7 @@ router.get(
 
 router.get(
     "/:id/edit",
+    isLoggedIn,
     catchAsync(async (req, res) => {
         const record = await Record.findById(req.params.id);
         if (!record) {
@@ -65,6 +69,7 @@ router.get(
 
 router.put(
     "/:id",
+    isLoggedIn,
     validateRecord,
     catchAsync(async (req, res) => {
         const { id } = req.params;
@@ -78,6 +83,7 @@ router.put(
 
 router.delete(
     "/:id",
+    isLoggedIn,
     catchAsync(async (req, res) => {
         const { id } = req.params;
         await Record.findByIdAndDelete(id);

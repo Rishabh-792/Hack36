@@ -14,8 +14,11 @@ const MongoDBStore = require("connect-mongo");
 const catchAsync = require("./utils/catchAsync");
 const ExpressError = require("./utils/ExpressError");
 
+const userRoutes = require("./routes/users");
 const records = require("./routes/records");
 const forums = require("./routes/forum");
+
+const User = require("./models/user");
 
 mongoose.connect("mongodb://localhost:27017/hack", {
     useNewUrlParser: true,
@@ -54,12 +57,21 @@ app.use(session(sessionConfig));
 
 app.use(flash());
 
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate()));
+
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
 app.use((req, res, next) => {
+    res.locals.currentUser = req.user;
     res.locals.success = req.flash("success");
     res.locals.error = req.flash("error");
     next();
 });
 
+app.use("/", userRoutes);
 app.use("/records", records);
 app.use("/records/:id/forum", forums);
 
