@@ -1,12 +1,11 @@
 # Hack36 team Nawabi na Ghate
-'''
-*Rishabh Maheshwari (B20063)
-*Chandresh Soni   (B20284)
-*Pratik Kamble   (B20106)
-'''
+
+*Rishabh Maheshwari (B20063)*
+*Chandresh Soni   (B20284)*
+*Pratik Kamble   (B20106)*
 
 ## Project Pharmxchange
->Sabak ek ko seekh hum sabko
+Sabak ek ko seekh hum sabko
 Our objective is to increase medical awareness using a different approach but something like "SABAK EK KO SEEKH HUM SABKO." Our major goal is to utilize to assist people learn from the wisdom of others, and our objective is to establish a database that will be used by hospitals and medical practitioners all over the world to help in treating patients at a lower cost and with better care.
 
 The database will function as follows:
