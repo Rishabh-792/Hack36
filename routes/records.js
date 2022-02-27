@@ -1,15 +1,22 @@
 const express = require("express");
 const router = express.Router();
 const Record = require("../models/records");
+const User = require("../models/user");
 const catchAsync = require("../utils/catchAsync");
-
 const { isLoggedIn, isAuthor, validateRecord } = require("../middleware");
 
 router.get(
     "/",
     catchAsync(async (req, res) => {
         const records = await Record.find({});
-        res.render("records/index", { records });
+        let userTitle;
+        if (res.locals.currentUser) {
+            const authUser = await User.findById(res.locals.currentUser._id);
+            userTitle = authUser.title;
+        }
+        if (userTitle == "Doctor")
+            res.render("records/index", { records });
+        else res.render("records/student/index", { records });
     })
 );
 
@@ -45,7 +52,14 @@ router.get(
             req.flash("error", "Cannot find that record!");
             return res.redirect("/records");
         }
-        res.render("records/show", { record });
+        let userTitle;
+        if (res.locals.currentUser) {
+            const authUser = await User.findById(res.locals.currentUser._id);
+            userTitle = authUser.title;
+        }
+        if (userTitle == "Doctor")
+            res.render("records/show", { record });
+        else res.render("records/student/show", { record });
     })
 );
 
