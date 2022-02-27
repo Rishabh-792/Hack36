@@ -23,4 +23,5 @@ Download the code in you local machine and use command
 ```nodemon app.js```
 or
 ```node .js```
-then run localhost:3000 in your browser
+then run localhost:3000 
+Or you can run it by just one click in your browser as we have deployed it on Heroku [Pharmxchange](https://pharm-xchange.herokuapp.com/)
