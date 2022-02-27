@@ -1,6 +1,16 @@
+
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card-body">
+<form id="form"> 
+    <input type="search" id="query" name="q" placeholder="Search">
+    <button>Search</button>
+  </form>
+            </div></div>
 <% layout('layouts/boilerplate')%>
     <div id="cluster-map"></div>
-    <h1 class="my-4">All Records</h1>
+    <h1 class="my-4">Records</h1>
+
     <ul>
         <% for (let record of records){%>
             <div class="card mb-3">
@@ -8,18 +18,18 @@
                     <div class="col-md-8">
                         <div class="card-body">
                             <h5 class="card-title">
-                                Patient's Name : <%= record.name %>
+                                Disease : <%= record.disease %>
                             </h5>
                             <p class="card-text">
-                                Disease : <%= record.disease %>
+                                Symptoms : <%= record.symptoms%>
                             </p>
                             <p class="card-text">
                                 <small class="text-muted">
-                                    Symptoms : <%= record.symptoms%>
+                                    Description : <%= record.description%>
                                 </small>
                             </p>
                             <a class="btn btn-primary" href="/records/<%=record._id%>">View
-                                <%=record.name%>'s Record
+                                 Record
                             </a>
                         </div>
                     </div>

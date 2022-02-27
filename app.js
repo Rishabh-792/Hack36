@@ -17,7 +17,7 @@ const ExpressError = require("./utils/ExpressError");
 const records = require("./routes/records");
 const forums = require("./routes/forum");
 
-mongoose.connect("mongodb://localhost:27017/hack", {
+mongoose.connect("mongodb+srv://cs:1234@cluster0.wyw0m.mongodb.net/cs?retryWrites=true&w=majority", {
     useNewUrlParser: true,
     useUnifiedTopology: true,
 });
