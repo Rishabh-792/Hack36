@@ -24,4 +24,4 @@ or
 then run localhost:3000 
 
 Or you can run it by just one click in your browser as we have deployed it on Heroku [Pharmxchange](https://pharm-xchange.herokuapp.com/)
-\n In case the given URL displays no records or an empty record, please use this link : [PharmXchange](https://pharmexchnage.herokuapp.com/)
+In case the given URL displays no records or an empty record, please use this link : [PharmXchange](https://pharmexchnage.herokuapp.com/)
