@@ -18,10 +18,15 @@ Other doctors whose patients exhibit different symptoms can check the database t
 ## How to run code 
 For running the code 
 Download the code in you local machine and use command
+
 ```nodemon app.js```
+
 or
+
 ```node .js```
+
 then run localhost:3000 
 
 Or you can run it by just one click in your browser as we have deployed it on Heroku [Pharmxchange](https://pharm-xchange.herokuapp.com/)
+
 In case the given URL displays no records or an empty record, please use this link : [PharmXchange](https://pharmexchnage.herokuapp.com/)
